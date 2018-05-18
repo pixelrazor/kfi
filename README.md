@@ -14,7 +14,9 @@ It should be pretty portable, the only major thing that might change between ver
 If it doesn't immediatly work for your version, just change the values of regs\_len and reg\_names to the appropriate values for your kernel (These can be found in the arch/x86/include/asm/ptrace.h file of your kernel's source)
 1. `make`
 2. insert (`make insert` will insert it with insmod. You could also use `make install` if you would like to use modprobe)
+
 If you wish to build the cli tool, run `go get github.com/pixelrazor/kfi/kfi-inject`
+
 NOTE: this requires you have the go binaries installed, and will place the binary in $GOPATH/bin
 ## Support me
 <a href="https://www.buymeacoffee.com/iZ1Dhem" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>

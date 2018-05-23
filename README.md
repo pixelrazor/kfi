@@ -25,14 +25,14 @@ The autoci directory contains a program that can run a program, checkpoint it, i
 
 The checkpointing feature relies on on [blcr](http://crd.lbl.gov/departments/computer-science/CLaSS/research/BLCR/) being set up on your system. If a program doesn't exit with error code 0 or abnormally terminates, it will attempt to restore from checkpoints, starting with the most recent one, until it completes successfully
 
-The fault injection feature relies on the KFI module and library being installed. The interval specified will be the rate of a randomly sampled exponential distrobution.
+The fault injection feature relies on the KFI module and library being installed. The interval specified will be the rate of a randomly sampled exponential distribution.
 
 `Usage: autoci [options] program`
 
 Flag | Meaning
 --- | ---
 \-kfi | Enable fault injection
-\-k <duration> | Set the average time between faults
+\-k \<duration\> | Set the average time between faults
 \-blcr | Enable checkpointing
 \-b \<duration\> | Set the checkpointing interval
 

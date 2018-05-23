@@ -122,10 +122,11 @@ var (
 func interrupts() {
 	sig := make(chan os.Signal)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+	termSig := <-sig
 	for _, v := range backups {
 		os.Remove(v)
 	}
-	log.Fatalf("Terminating early due to signal '%v'. Attempted to delete all checkpoints.\n", <-sig)
+	log.Fatalf("Terminating early due to signal '%v'. Attempted to delete all checkpoints.\n", termSig)
 }
 func main() {
 	var (

@@ -6,8 +6,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/pixelrazor/kfi"
@@ -117,6 +119,14 @@ var (
 	numBackups          = 0
 )
 
+func interrupts() {
+	sig := make(chan os.Signal)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+	for _, v := range backups {
+		os.Remove(v)
+	}
+	log.Fatalf("Terminating early due to signal '%v'. Attempted to delete all checkpoints.\n", <-sig)
+}
 func main() {
 	var (
 		b backuper
@@ -132,6 +142,7 @@ func main() {
 		fmt.Println("Please supply a file to run")
 		os.Exit(-1)
 	}
+	go interrupts()
 	file := flag.Arg(0)
 	if *kfiEnabled {
 		kfiTimes = make([]time.Duration, 0)

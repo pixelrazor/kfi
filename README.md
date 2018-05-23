@@ -23,7 +23,9 @@ NOTE: this requires you have the go binaries installed, and will place the binar
 
 The autoci directory contains a program that can run a program, checkpoint it, inject faults, and benchmark it. 
 
-The checkpointing feature relies on on [blcr](http://crd.lbl.gov/departments/computer-science/CLaSS/research/BLCR/) being set up on your system. If a program doesn't exit with error code 0 or abnormally terminates, it will attempt to restore from checkpoints, starting with the most recent one, until it completes successfully
+**NOTE:** This application is not meant to be widely used, and should not be considered a normal tool from the package. While it works just fine, the code is poorly structured, messy, and doesn't follow the best practices it could. Use this only if it interests you, otherwise steer clear.
+
+The checkpointing feature relies on on [blcr](http://crd.lbl.gov/departments/computer-science/CLaSS/research/BLCR/) being set up on your system. If a program doesn't exit with error code 0 or abnormally terminates, it will attempt to restore from checkpoints, starting with the most recent one, until it completes successfully.
 
 The fault injection feature relies on the KFI module and library being installed. The interval specified will be the rate of a randomly sampled exponential distribution.
 

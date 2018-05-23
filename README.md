@@ -18,5 +18,27 @@ If it doesn't immediatly work for your version, just change the values of regs\_
 If you wish to build the cli tool, run `go get github.com/pixelrazor/kfi/kfi-inject`
 
 NOTE: this requires you have the go binaries installed, and will place the binary in $GOPATH/bin
+
+## Auto Checkpoint and Inject
+
+The autoci directory contains a program that can run a program, checkpoint it, inject faults, and benchmark it. 
+
+The checkpointing feature relies on on [blcr](http://crd.lbl.gov/departments/computer-science/CLaSS/research/BLCR/) being set up on your system. If a program doesn't exit with error code 0 or abnormally terminates, it will attempt to restore from checkpoints, starting with the most recent one, until it completes successfully
+
+The fault injection feature relies on the KFI module and library being installed. The interval specified will be the rate of a randomly sampled exponential distrobution.
+
+`Usage: autoci [options] program`
+
+Flag | Meaning
+--- | ---
+\-kfi | Enable fault injection
+\-k <duration> | Set the average time between faults
+\-blcr | Enable checkpointing
+\-b \<duration\> | Set the checkpointing interval
+
+Examples of valid durations:
+
+10s, 1m5s, 4h, 1h6m7s, 12ms, 55ns, 101us
+
 ## Support me
 <a href="https://www.buymeacoffee.com/iZ1Dhem" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>

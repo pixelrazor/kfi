@@ -29,7 +29,7 @@ static int p_id,freg,fbit;
 
 static struct proc_dir_entry *pwe;
 int kfi_write(struct file *f, const char __user *buff, unsigned long count, void *data){
-	char *id;
+	char *id, *start, *reg_string = NULL, *bit_string = NULL;
 	struct pid *pid_s;
 	struct task_struct *task;
 	struct pt_regs *regs;
@@ -39,12 +39,34 @@ int kfi_write(struct file *f, const char __user *buff, unsigned long count, void
 	wait_queue_head_t wait;
 	ret = -1;
 	id = kzalloc(500*sizeof(char), GFP_KERNEL);
-	if(unlikely(copy_from_user(id,buff,499))){
+	// Copy from the user space pointer
+	if(unlikely(copy_from_user(id,buff,500))){
 		pr_err("kfi: copy_from_user returned non-zero");
 		ret = -EFAULT;
 		goto freeid;
 	}
+	// Parse the string
+	// "pid" or "pid reg" or "pid reg bit"
+	for(start = id; *start; start++){
+		if (*start == ' '){
+			while (*start == ' ') {
+				*(start++) = 0;
+			}
+			if (reg_string == NULL) {
+				reg_string = start;
+			} else {
+				bit_string = start;
+				break;
+			}
+		}
+	}
 	p_id = simple_strtoul(id,NULL,0);
+	if (reg_string != NULL) {
+		freg = simple_strtoul(reg_string,NULL,0);
+	}
+	if (bit_string != NULL) {
+		fbit = simple_strtoul(bit_string,NULL,0);
+	}
 	pid_s = find_get_pid(p_id);
 	if(unlikely(!pid_s)) {
 		pr_err("kfi: pid_s null");
@@ -69,8 +91,13 @@ int kfi_write(struct file *f, const char __user *buff, unsigned long count, void
 	regs = task_pt_regs(task);
 	registers = (unsigned long *)regs;
 	get_random_bytes(nums, 2);
-	freg = nums[0] % regs_len;
-	fbit = nums[1] % (sizeof(unsigned long) * 8);
+	// If no reg/bit was specified, or if not a valid input, pick random values
+	if (reg_string == NULL || freg >= regs_len || freg < 0){
+		freg = nums[0] % regs_len;
+	}
+	if (bit_string == NULL || fbit >= sizeof(unsigned long) * 8 || fbit < 0){
+		fbit = nums[1] % (sizeof(unsigned long) * 8);
+	}
 	pr_info("kfi: pid %d reg %s bit %d",p_id,reg_names[freg],fbit);
 	registers[freg] ^= 1 << fbit;
 	if(unlikely(kill_pid(pid_s,SIGCONT,1))){

@@ -37,6 +37,9 @@ Flag | Meaning
 \-k \<duration\> | Set the average time between faults
 \-blcr | Enable checkpointing
 \-b \<duration\> | Set the checkpointing interval
+\-n \<int\> | The number of most recent checkpoints to keep (if blcr is enabled)
+\-r \<int\> | The number of times to retry from a single checkpoint before deleting (if blcr is enabled)
+\-t \<duration\> | Set a timeout. If execution lasts as long as this value, it will terminate the application
 
 Examples of valid durations:
 

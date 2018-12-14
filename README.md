@@ -15,7 +15,7 @@ If it doesn't immediatly work for your version, just change the values of regs\_
 1. `make`
 2. insert (`make insert` will insert it with insmod. You could also use `make install` if you would like to use modprobe)
 
-If you wish to build the cli tool, run `go get github.com/pixelrazor/kfi/kfi-inject`
+To download all of the Go tooling, run `go get github.com/pixelrazor/kfi/...`
 
 NOTE: this requires you have the go binaries installed, and will place the binary in $GOPATH/bin
 
